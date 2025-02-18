@@ -99,7 +99,7 @@ Check the S3 console to find the saved file, download it and check its contents.
 
 ## One last thing
 
-You might have noticed that Lambdas regularlycreate new log groups, and that these log groups have no retention time set.
+You might have noticed that Lambdas regularly create new log groups, and that these log groups have no retention time set.
 That means, at the moment we're saving the logs of all executions of any of our lambdas - forever.
 
 Identify the missing property for the two `NodejsFunction`s from the [docs](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.NodejsFunction.html#class-nodejsfunction-construct), and set it to one month. Hint: There's a class called `RetentionDays` in `aws-cdk-lib/aws-logs` - and we used it previously already.
