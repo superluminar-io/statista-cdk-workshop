@@ -20,9 +20,9 @@ export class VpcStack extends cdk.Stack {
           cidrMask: 24,
           name: 'private',
           subnetType: SubnetType.PRIVATE_WITH_EGRESS,
-        }
+        },
       ],
       natGateways: 1,
-    })
+    });
   }
 }

@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Task } from "./entities/task";
+import { Todo } from "./entities/todo";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -10,5 +10,5 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true, // Auto creates tables, disable in production
   logging: false,
-  entities: [Task],
+  entities: [Todo],
 });

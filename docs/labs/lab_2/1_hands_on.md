@@ -16,34 +16,23 @@ Open the `todo-service/src/database.ts` file and make sure the database configur
 Then, check out the `todo-service/README.md` and run the app on your local machine.
 Feel free to play around with its API.
 
+Make sure to stop the application after you're done.
+
 
 ## Run Todo Service in a container
 
-Create a `Dockerfile` for the `todo-service` folder. The file has no extension.
-Add the following content to it:
+Check out the `Dockerfile` for the `todo-service` folder. The file has no extension.
 
-```dockerfile
-FROM node:22-alpine
-
-WORKDIR /app
-
-COPY . .
-
-RUN npm install
-
-CMD ["npm", "start"]
-```
-
-Check it out, and try to understand what the instructions in the file are doing.
+Try to understand what the instructions in the file are doing.
 
 The Dockerfile:
 1. Uses Node.js 22 with Alpine Linux as base image.
 2. Sets the working directory within the container to `/app`.
 3. Copies the application files from the same folder to the container
 4. Installs dependencies as described in the `package.json` file.
-5. Configures the app startup for when the contaienr starts.
+5. Configures the app startup for when the container starts.
 
-Again, we could use a `docker run ...` command to start the container, but we'll extend the existing `docker-compose.yml` file instead.
+We could use a `docker run ...` command to start the container, but we'll extend the existing `docker-compose.yml` file instead.
 
 Add the following block to the `docker-compose.yml` file:
 
@@ -58,7 +47,7 @@ Add the following block to the `docker-compose.yml` file:
 ```
 
 This makes sure that the `todo-service` container is built from the Dockerfile in the same folder and started after the `postgres` container is started.
-The application will be exposed on localhost port 3000.
+The application will be exposed on localhost port 3000 - which is the same as before.
 
 Then, run `docker compose up` to start the `todo-service` container while keeping the database container running.
 

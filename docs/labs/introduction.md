@@ -1,13 +1,24 @@
 # Setup
 
-## How to use this workshop
 
-The topics covered by this workshop are the first level chapters.
-Each topic has multiple hands-on steps, which are the second level chapters.
-Each step contains instructions, and a codebase containing the end-state for this step.
+## How To Use This Workshop
+
+This workshop is structured into several labs, each focusing on a specific AWS service or concept. Each lab contains:
+
+- An introduction to the topic
+- Hands-on exercises with step-by-step instructions
+- Code that shows the desired end-state
+
+Navigate through the labs in order, as each builds upon the previous one. Use the sidebar to move between sections.
 
 If you get stuck during any of the steps, you can always check the end-state to see what you should have at the end of the particular step.
-To highlight the difference between your current state and the end-state, you can use for example `diff -Nur --exclude=node_modules cdk docs/labs/lab_0/goal/cdk`.
+To see the difference between your current state and the end-state, you can use for example `diff -Nur --exclude=node_modules todo-service docs/labs/lab_2/goal/todo-service`.
+
+To be able to `diff`, you'll need to check out this repository locally.
+
+It's recommended to start with a new empty folder and copying the `todo-service` folder from this repository into it.
+
+When this workshop describes filepaths, like `cdk/package.json`, they're always relative to that new folder.
 
 
 ## Start Docker

@@ -1,11 +1,15 @@
 # Theory
 
-In this lab, we'll learn how to run load tests against our service, how they affect our metrics and how we can use the results to improve the resources assigned to our service and database.
+In this lab, you'll learn how to run load tests against your service, how they affect its metrics and how you can use the results to improve the resources assigned to the service and database.
 
 
 ## Metrics
 
+
 Metrics are quantitative measurements that help monitor and understand the health, performance, and behavior of systems and applications. They provide data points that can be tracked over time to identify trends, anomalies, and potential issues before they become critical problems.
+
+While logs are text output that signal specific events (like error messages, API requests, or database queries) with details like timestamps and stack traces, metrics are numerical values that track system performance and behavior over time.
+For example, a log might show "User abc123 failed to authenticate at 2024-03-20 15:04:32 - Invalid password", whereas a metric would track "Number of failed logins per minute". Logs help you debug specific issues, while metrics help you monitor trends like increasing error rates or declining performance.
 
 Common types of metrics include:
 
@@ -36,3 +40,6 @@ The data collected during load tests helps identify these performance limitation
 By running load tests before production deployment, teams can validate their architecture choices and resource allocations. The results show exactly where performance degrades, which components need optimization, and what load levels trigger scaling events. This empirical data is essential for setting appropriate resource limits and scaling thresholds in production environments.
 
 If you have no prior experience with with load testing, you might want to read the "Different tests for different goals" and the below cheat-sheet at https://grafana.com/docs/k6/latest/testing-guides/test-types/.
+
+While we're running load tests in this workshop, AWS generally recommends against running load tests against their infrastructure, as it can initiate security mechanisms (https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/welcome.html#important).
+For the purpose of this workshop, we're ignoring that, since we're running the load tests with the limited resources of our home network and work machine which by far won't be enough to impact AWS infrastructure.

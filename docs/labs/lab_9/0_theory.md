@@ -1,6 +1,6 @@
 # Theory
 
-In this lab, we'll learn how to implement a cache for our application.
+In this lab, you'll learn how to implement a cache for our application.
 
 
 ## Caching
@@ -24,8 +24,3 @@ Common caching patterns:
 For distributed systems, shared caches like Redis allow multiple application instances to access the same cached data, maintaining consistency across the system and avoiding the problems of inconsistent local caches or cache hits on one instance but not the others.
 
 
-## Level 1 and Level 2 Constructs in CDK
-
-AWS CDK constructs come in different abstraction levels. Level 1 (L1) constructs, identifiable by their "Cfn" prefix, are direct one-to-one mappings to CloudFormation resources and require detailed configuration. Level 2 (L2) constructs build on top of these, providing higher-level abstractions that implement AWS best practices by default while hiding much of the underlying complexity.
-So far, we've only used L2 constructs.
-ElastiCache has an L1 construct, which means a bit more code is required to set it up.

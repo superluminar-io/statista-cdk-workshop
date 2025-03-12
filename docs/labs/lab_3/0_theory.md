@@ -1,7 +1,7 @@
 # Theory
 
-In this lab, we will learn how to create a database in AWS and how to use AWS Secrets Manager to retrieve the credentials for it.
-We'll also connect our locally running application to the AWS-hosted database.
+In this lab, you will learn how to create a database in AWS and how to use AWS Secrets Manager to retrieve the credentials for it.
+You will also connect your locally running application to the AWS-hosted database.
 
 ## AWS Relational Database Service (RDS)
 

@@ -1,6 +1,7 @@
 # Theory
 
-In this lab, we will explore a sample application that uses a database.
+In this lab, you will explore the sample application we'll use in this workshop.
+
 
 ## Docker
 
@@ -15,8 +16,9 @@ Key advantages of containers include:
 - Efficient resource usage
 - Easy scaling and updates
 
-The contents of a container image are defined in a `Dockerfile`.
-An example Dockerfile might look like this:
+The contents of a container image are defined in `Dockerfile`s.
+An example Dockerfile as found in `todo-service/Dockerfile` might look like this:
+
 ```dockerfile
 FROM node:22-alpine
 
@@ -31,7 +33,7 @@ CMD ["npm", "start"]
 
 It starts from a pre-existing container image `node:22-alpine` which is a container image that contains the Node.js runtime version 22 on top of the Alpine Linux operating system.
 
-Working locally with contaienrs and images works like this:
+Working locally with containers and images works like this:
 
 ```sh
 docker build -t todo-service .

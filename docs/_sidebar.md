@@ -2,6 +2,8 @@
 - Labs
   - Lab 0 - Introduction
     - [Introduction](/labs/introduction)
+    - [Theory](/labs/lab_0/0_theory)
+    - [Hands On](/labs/lab_0/1_hands_on)
   - Lab 1 - Networking
     - [Theory](/labs/lab_1/0_theory)
     - [Hands On](/labs/lab_1/1_hands_on)
@@ -32,6 +34,11 @@
   - Lab 10 - Lambda and SQS
     - [Theory](/labs/lab_10/0_theory)
     - [Hands On](/labs/lab_10/1_hands_on)
-  - [Clean Up](/labs/lab_cleanup)
-- [Next Steps](/2_next)
-- [Conclusion](/3_conclusion)
+  - Lab 11 - SNS
+    - [Theory](/labs/lab_11/0_theory)
+    - [Hands On](/labs/lab_11/1_hands_on)
+  - Lab 12 - S3
+    - [Theory](/labs/lab_12/0_theory)
+    - [Hands On](/labs/lab_12/1_hands_on)
+- [Conclusion](/2_conclusion)
+- [Clean Up](/3_cleanup)

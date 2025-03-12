@@ -1,6 +1,6 @@
 # Theory
 
-In this lab, we'll learn how to use secrets from the AWS Secrets Manager in our application.
+In this lab, you'll learn how to use secrets from the AWS Secrets Manager in your application.
 
 ## Environment-agnostic application configuration
 

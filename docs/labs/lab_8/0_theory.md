@@ -1,6 +1,6 @@
 # Theory
 
-In this lab, we'll learn how to manually trigger a database failover and what it means for our application.
+In this lab, you'll learn how to manually trigger a database failover and what it means for our application.
 
 
 ## AWS Aurora Database Cluster Architecture
