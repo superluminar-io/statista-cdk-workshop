@@ -27,6 +27,8 @@ This workshop is ideal for:
 - Monitoring and observability
 - Cost optimization and auto-scaling
 - Database failover scenarios
+- Email notifications with SNS
+- File storage with S3
 
 
 ## Prerequisites
