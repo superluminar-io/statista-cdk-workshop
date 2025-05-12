@@ -25,5 +25,8 @@
   - Lab 7 - Database Failover
     - [Theory](/labs/lab_8/0_theory)
     - [Hands On](/labs/lab_8/1_hands_on)
+  - Lab 8 - Custom Contructs
+    - [Theory](/labs/lab_9/0_theory)
+    - [Hands On](/labs/lab_9/1_hands_on)
 - [Conclusion](/2_conclusion)
 - [Clean Up](/3_cleanup)
