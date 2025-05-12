@@ -2,35 +2,8 @@
 
 ## Create database in AWS
 
-If you've worked with Databases in AWS before, you can continue with the headline below that says "Adding a database stack".
-
-Open the RDS console in AWS and create a new database manually.
-
-- Use "Standard create" and "Aurora (PostgreSQL compatible)" as database engine
-- Choose the "Dev/Test" template, so we are allowed to create a single instance database
-- Give it a name like `tododb`
-- As instance class, choose the smallest burstable instance for example `db.t3.medium`
-- Set your own password, as the default one might have characters that are not allowed in the connection string
-- Since we want to access the database from our local machine and don't have a VPN to the network of the workshop account, we need to set it to allow "Public Access"
-- Make sure to create a new security group for this postgres database that allows inbound traffic on port 5432 from your IP address
-- Disable enhanced monitoring, it's not needed for this workshop and will only add costs
-- In the Additional Configuration section, you can have it create an initial database, with a name `postgres`. Otherwise you need to connect manually and create it - which is not covered by this workshop
-- Everything else can be left on their default values
-- After you submit the creation, you can verify the security group rules. It should have a rule for your IP address and the default postgresql port 5432
-
-The creation of a RDS database takes roughly 10 minutes, so feel free to grab a coffee in the meantime.
-
-
-## Todo Service on localhost and Todo Database on AWS
-
-When the database cluster is ready, retrieve it's Writer endpoint and update the connection string in the `todo-service/database.ts` file accordingly.
-The credentials can be found in the Secret Manager of the AWS account.
-
-Comment out the `postgres` service section in the `todo-service/docker-compose.yaml` file, including the `depends_on` part of the `todo-service`.
-Run `docker compose up --build` in the `todo-service` folder to start the database container on your local machine.
-Verify that the application can connect to the database and works as intended.
-
-Okay, the database on AWS is working and it's relatively easy to work with. But as with the network, we want to manage it with code, so we can replicate it in multiple accounts.
+In the previous lab, we created a VPC in AWS. Now, we want to create a database in that VPC. We use the `DatabaseCluster` 
+CDK construct for the purpose. To learn more about it, check the [documentation](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_rds-readme.html).
 
 ## Adding a database stack
 
@@ -77,7 +50,7 @@ export class DatabaseStack extends cdk.Stack {
       }),
       vpc: props?.vpc,
       vpcSubnets: {
-        subnetType: SubnetType.PUBLIC, // TODO change to private
+        subnetType: SubnetType.PRIVATE_WITH_EGRESS,
       },
       defaultDatabaseName: 'postgres',
     });
@@ -87,11 +60,7 @@ export class DatabaseStack extends cdk.Stack {
 }
 ```
 
-Can you identify which property relates to which setting from the manual setup from earlier?
-
-All of the properties should be familiar to you from the manual setup.
 Similar to the VPC stack, you can see there's a public variable. `dbCredentialsSecret` contains the Secret object that contains the credentials for the database, so we can use it in our application later.
-
 This stack needs to be added to the `bin/cdk.ts` file similarly to the `VpcStack`:
 
 ```typescript
@@ -122,13 +91,13 @@ cdk deploy --all
 # This command fails, please read on.
 ```
 
-Again, the creation of a RDS database takes roughly 10 minutes, so feel free to grab a coffee in the meantime.
+The creation of a RDS database takes roughly 10 minutes, so feel free to grab a coffee in the meantime.
 
 After the deployment of this new stack is complete, check if you can find the database in the AWS console.
 How is it configured? In which subnets is it running in? Does it have a security group?
 
 
-## Todo Service on localhost and Todo Database on AWS - IaC edition
+## Connect the Todo Service with the Database on AWS
 
 Now, with the new database, we should update the database configuration in the `todo-service/database.ts` file.
 
@@ -138,10 +107,10 @@ There's a button "Retrieve secret value" at the side when you are in the secret'
 ```typescript
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: "databasestack-databasecluster68fc2945-xufnkmkhggpm.cluster-cvu4og6qcldr.eu-central-1.rds.amazonaws.com", // Replace me as necessary
+  host: "YOUR_CLUSTER_NAME.eu-central-1.rds.amazonaws.com", // Replace me as necessary
   port: 5432, // Replace me as necessary
-  username: "postgres", // Replace me as necessary
-  password: "wmi_BuK1=HTi2vjEWAsE0_b9-v4o6_", // Replace me as necessary
+  username: "YOUR_USERNAME", // Replace me as necessary
+  password: "YOUR_PASSWORD", // Replace me as necessary
   database: "postgres", // Replace me as necessary
   synchronize: true, // Auto creates tables, disable in production
   logging: false,
@@ -149,12 +118,26 @@ export const AppDataSource = new DataSource({
 });
 ```
 
-Don't forget to add the security group rule for your IP once again. Remember: New database -> New security group
+## Connect to your database using Cloudshell
 
-Since it's an intermediate step, you can create it manually.
+We can only connect to the database from within the VPC we created earlier. As an easy solution, we can use the AWS CloudShell. 
+It's a browser-based shell that allows you to run commands in your AWS account without needing to install anything locally 
+or start an EC2 instance in your VPC.
 
-Verify that the application still works as intended with `docker compose up --build`.
-The `--build` tells docker to rebuild the image, because application files changed.
-By default, docker only rebuilds, when the Dockerfile changed.
+By default, the CloudShell is not in the same VPC as your database, but you can change that. To do that we need to create an VPC environment in the CloudShell.
+1. Open the AWS Management Console in your browser.
+2. Click on the CloudShell icon in the top right corner of the console.
+3. Wait for the CloudShell to start. This may take a few moments.
+4. Click on the "Actions" dropdown menu in the CloudShell.
+5. Select "Create VPC Environment" and select the VPC you created earlier.
 
-Verify that the application can connect to the database and works as intended.
+To connect to the database, we need the PostgreSQL client. It should already been installed in the CloudShell.
+```sh
+$ psql --version
+psql (PostgreSQL) 15.12
+```
+
+Use the credentials from from the AWS Secrets Manager to connect to the database.
+```sh
+$ psql -h DB_HOSTNAME -U YOUR_USERNAME -d postgres
+```

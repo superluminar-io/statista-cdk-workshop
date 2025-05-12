@@ -6,7 +6,7 @@ This workshop comes with an example application, so you can focus on the infrast
 Instead of downloading it file by file, we'll clone the repository into your local machine.
 
 ```sh
-git clone https://github.com/thetillhoff/statista-aws-advanced-workshop
+git clone https://github.com/superluminar/statista-cdk-workshop
 ```
 
 You'll later find the application in the `todo-service` folder.
