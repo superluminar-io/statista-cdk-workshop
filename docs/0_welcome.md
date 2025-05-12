@@ -1,8 +1,8 @@
 # AWS Workshop
 
-Welcome to this AWS Workshop!
+Welcome to this AWS CDK Workshop!
 
-It is designed for developers who want to learn about container orchestration, load balancing, databases, and serverless computing on AWS. Through hands-on labs, you'll build a modern cloud infrastructure using AWS CDK.
+It is designed for developers who want to learn about managing infrastructure with code on AWS. Through hands-on labs, you'll build example cloud application using AWS CDK.
 
 
 ## Target Audience
@@ -25,22 +25,15 @@ This workshop is ideal for:
 - Asynchronous processing with SQS and Lambda
 - Security best practices and AWS Secrets Manager
 - Monitoring and observability
-- Cost optimization and auto-scaling
-- Database failover scenarios
-- Email notifications with SNS
-- File storage with S3
 
 
 ## Prerequisites
 
-- Basic understanding of AWS, commandline and containerization concepts
-- Familiarity with Docker
+- Basic understanding of AWS, commandline, and infrastructure as code concepts
 - AWS account with appropriate permissions
-- Docker installed
-- Node.js (v22 recommended)
-- AWS CLI version 2 installed
-- curl or Postman installed
-- jq installed (optional)
+- Docker installed (e.g. Docker Desktop for [Windows](https://docs.docker.com/desktop/setup/install/windows-install/) or [Mac](https://docs.docker.com/desktop/setup/install/mac-install/))
+- Node.js (v22 recommended) (see [Node.js installation instructions](https://nodejs.org/en/download/))
+- AWS CLI version 2 installed (see [AWS CLI installation instructions](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions))
 
 
 Let's get started!

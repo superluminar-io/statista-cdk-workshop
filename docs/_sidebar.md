@@ -7,38 +7,23 @@
   - Lab 1 - Networking
     - [Theory](/labs/lab_1/0_theory)
     - [Hands On](/labs/lab_1/1_hands_on)
-  - Lab 2 - Docker
-    - [Theory](/labs/lab_2/0_theory)
-    - [Hands On](/labs/lab_2/1_hands_on)
-  - Lab 3 - Database on AWS
+  - Lab 2 - Database on AWS
     - [Theory](/labs/lab_3/0_theory)
     - [Hands On](/labs/lab_3/1_hands_on)
-  - Lab 4 - Container on AWS
+  - Lab 3 - Container on AWS
     - [Theory](/labs/lab_4/0_theory)
     - [Hands On](/labs/lab_4/1_hands_on)
-  - Lab 5 - Secrets and Security
+  - Lab 4 - Secrets and Security
     - [Theory](/labs/lab_5/0_theory)
     - [Hands On](/labs/lab_5/1_hands_on)
-  - Lab 6 - Metrics and Load Testing
+  - Lab 5 - Metrics and Load Testing
     - [Theory](/labs/lab_6/0_theory)
     - [Hands On](/labs/lab_6/1_hands_on)
-  - Lab 7 - Cost Optimization and Autoscaling
+  - Lab 6 - Cost Optimization and Autoscaling
     - [Theory](/labs/lab_7/0_theory)
     - [Hands On](/labs/lab_7/1_hands_on)
-  - Lab 8 - Database Failover
+  - Lab 7 - Database Failover
     - [Theory](/labs/lab_8/0_theory)
     - [Hands On](/labs/lab_8/1_hands_on)
-  - Lab 9 - Caching
-    - [Theory](/labs/lab_9/0_theory)
-    - [Hands On](/labs/lab_9/1_hands_on)
-  - Lab 10 - Lambda and SQS
-    - [Theory](/labs/lab_10/0_theory)
-    - [Hands On](/labs/lab_10/1_hands_on)
-  - Lab 11 - SNS
-    - [Theory](/labs/lab_11/0_theory)
-    - [Hands On](/labs/lab_11/1_hands_on)
-  - Lab 12 - S3
-    - [Theory](/labs/lab_12/0_theory)
-    - [Hands On](/labs/lab_12/1_hands_on)
 - [Conclusion](/2_conclusion)
 - [Clean Up](/3_cleanup)
