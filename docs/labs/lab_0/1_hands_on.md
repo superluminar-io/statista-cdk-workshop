@@ -66,7 +66,7 @@ This process is called "bootstraping".
 Run the following command to bootstrap your account:
 
 ```sh
-cdk bootstrap
+cdk bootstrap --termination-protection
 ```
 
 This will create a CloudFormation Stack in your account that sets up the necessary resources for CDK.
@@ -81,5 +81,6 @@ This Stack is used by CDK to store assets and resources needed for deployment. I
 - Other configuration parameters CDK needs for deployment
 
 These resources enable CDK to properly stage and deploy your infrastructure code to AWS.
+With the `--termination-protection` flag, the stack is protected from accidental deletion, which is a good practice in general.
 
 It's a single "fire-and-forget" operation, but it enables us to deploy our own Stacks to this AWS account.
