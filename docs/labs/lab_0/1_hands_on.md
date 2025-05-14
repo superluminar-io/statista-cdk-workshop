@@ -29,45 +29,6 @@ Verify that it's installed correctly by running the following command:
 cdk --version
 ```
 
-
-## Log in on commandline
-
-After you logged in on the AWS console in your browser, you can create API access keys.
-- In the navigation bar at the top, enter `IAM` in the search bar
-- Click on `Users` in the left sidebar
-- Click on your username in the list of users
-- Click on the `Security Credentials` tab
-- Click on `Create access key`
-- Select `Command line interface` as use case
-- Confirm the hint about Alternatives and click `Next`
-- Click on `Create access key`
-- Either download or copy the Access key and the Secret access key - this is the only time you'll see it.
-
-Then, in your terminal, use the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables to log in on commandline.
-
-```sh
-export AWS_ACCESS_KEY_ID=<your-access-key-id>
-export AWS_SECRET_ACCESS_KEY=<your-secret-access-key>
-```
-
-You can verify that you're logged in by running the following command:
-
-```sh
-aws sts get-caller-identity
-```
-
-The result should look similar to this:
-```sh
-{
-    "UserId": "AIDA3FLD53HTVE4GXXXXX",
-    "Account": "767398107123",
-    "Arn": "arn:aws:iam::767398107123:user/workshop"
-}
-```
-
-Congratulations, you're logged in on commandline!
-
-
 ## Create a new AWS-CDK project
 
 Create an empty folder named `cdk` at the root of your working directory.
