@@ -1,6 +1,7 @@
 # Theory
 
-In this lab, you will learn how to create a VPC and subnets using AWS CDK.
+In this lab, you will learn how to create a VPC and subnets using AWS CDK. This VPC will be the foundation for the rest 
+of the labs in this workshop. You will also learn about some of the key concepts in AWS networking, such as VPCs, subnets, security groups, and gateways.
 
 
 ## Networking at AWS

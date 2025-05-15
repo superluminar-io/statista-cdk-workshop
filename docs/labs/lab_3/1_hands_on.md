@@ -54,6 +54,10 @@ export class DatabaseStack extends cdk.Stack {
       },
       defaultDatabaseName: 'postgres',
     });
+    dbCluster.connections.allowDefaultPortFrom(
+        dbCluster.connections.securityGroups[0],
+        'Allow access from the same security group',
+    );
 
     this.dbCredentialsSecret = dbCluster.secret!;
   }
@@ -74,7 +78,6 @@ const databaseStack = new DatabaseStack(app, 'DatabaseStack', {
 ```
 
 The `vpcStack.vpc` is the object that was exposed by the `VpcStack` earlier. We now pass it to the `DatabaseStack` as a property, so it can use it to create the database in the VPC and its subnets.
-Did you notice the `subnetType: SubnetType.PUBLIC` earlier? That's because the database needs to be publicly accessible, so we can connect to it from our local machine for now.
 
 Deploy the changes with the following command:
 
