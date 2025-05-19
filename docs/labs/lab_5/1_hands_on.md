@@ -30,42 +30,11 @@ export const AppDataSource = new DataSource({
 
 
 The `process.env.*` statements mean that the application will pick up the values from environment variables.
-Docker Containers have their own set of environment variables, so we need to make sure to pass the environment variables specified in the `.env` file to the container.
-
-Before deploying to AWS, we can verify the changes locally, by using our docker-compose setup.
-
-Add the following content to a newly created `.env` file:
-
-```sh
-DB_HOST=postgres
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=password
-DB_NAME=postgres
-```
-
-Ensure you have both the database and the todo-service enabled in the `docker-compose.yml` file.
-Then, configure the `todo-service` service, so it picks up the environment variables from the `.env` file:
-
-```yaml
-todo-service:
-  build:
-    context: ./todo-service
-  ports:
-    - "3000:3000"
-  depends_on:
-    - postgres
-  env_file:
-    - .env
-```
-
-Run `docker compose up --build` to start the todo-service and the database locally.
-Verify the application is working as expected.
 
 Next, the environment variables need to be set to the correct values in the ECS stack.
-First we need a source where to read them from.
+First, we need a source where to read them from.
 Open the database secret in the Secrets Manager console in your browser.
-When you display the secrets contents and click on the `Plaintext` tab, you'll see that the key-value AWS showes, refers to the secret being JSON-formatted.
+When you display the secret's contents and click on the `Plaintext` tab, you'll see that the key-value AWS shows, refers to the secret being JSON-formatted.
 You'll need that knowledge in a moment.
 
 In the `lib/ecs-stack.ts` file, at the end of the `taskImageOptions`, right after the `logDriver` of the `ApplicationLoadBalancedFargateService` properties, add the following lines:
@@ -81,9 +50,9 @@ environment: {
 },
 ```
 
-Well, now we still have the credentials hardcoded in the codebase - and the wrong ones at that - because we just moved them from the `.env` file to the infrastructure...
+Well, now we still have the credentials hardcoded in the codebase - and the wrong ones at that - because we just moved them from the configuration file to the infrastructure...
 
-Wouldn't it be nice if we could just read them from the secret manager? ;P
+Wouldn't it be nice if we could just read them from the secret manager?
 Yes, that's possible, it's what we'll do next.
 
 Since we already expose the `dbCredentialsSecret` from the databaseStack, we only need to pass it to the EcsStack and use the secret reference it represents.
@@ -154,26 +123,3 @@ Did you notice how cdk automatically managed the permissions, so ECS can access 
 When the deployment is complete, check out the new ECS-task in the ECS console.
 There's additional information towards the bottom of its details page.
 Go to the `Environment variables and files` tab and check out how a secret references look like.
-
-
-## Security Hub
-
-Now we have deployed some workloads to our accounts.
-Let's take a short break and see what AWS can tell us about it.
-
-Go to the Security Hub console in your browser.
-
-Explore the different sub pages, while thinking of the following questions:
-
-- How to ensure your AWS organisation / account complies with a security standard like NIST?
-- Where would you see company-specific security issues specified via organisation wide AWS Config rules?
-- Where can you see security issues in your account, based on severity?
-- Are the findings meant for your account only, or are they meant for the whole organisation?
-- When looking at a specific finding, which resource is affected and how can you find out how to fix it?
-
-Security Hub sadly is a rather "slow" tool. Most rules it has are only checked once every 24 hours.
-
-Keep in mind, not all findings - even if labeled as `HIGH` - are necessarily critical. The rules AWS applies are sometimes a bit too generic, and your environment might be fine even if Security Hub lists a finding.
-
-But it's still a good practice to regularly check the findings and fix them.
-For some findings, "fixing" might be as simple as setting its so-called Workflow status to `SUPPRESSED` if you are sure it's not a security issue in your case.
