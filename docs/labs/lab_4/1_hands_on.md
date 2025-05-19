@@ -1,34 +1,8 @@
 # Hands On
 
+## Creating our ECS cluster
 
-## Planning our network setup
-
-Before we deploy our application to ECS, we need to think about the networking.
-
-It's best practice to have the todo-service in private subnets, so we also want to place it in them.
-
-The endpoint of our public database resolves to a public IP address.
-While possible to have our traffic go via the internet, we now have both our resources in the same VPC, so we want to have them communicate with each other via private IP addresses.
-
-That approach ...
-
-- increases security, as no traffic is routed via the public internet
-- reduces costs, as we don't pay for egress traffic
-- reduces attack surface, as we don't have public IP addresses
-
-So, we need to move the database to the private subnets as well.
-Sadly, AWS doesn't support moving resources from one subnet to another after they've been created.
-This means, we need to delete the `databaseStack` before recreating it in the private subnets.
-
-Trigger this deletion now manually via the CloudFormation console.
-
-
-## Moving the database to private subnets
-
-In the `lib/database-stack.ts` file, change the `subnetType` of the database to `PRIVATE_WITH_EGRESS`.
-Before we can deploy this, the stack deletion needs to complete. This will take a few minutes.
-In the meantime, we can already prepare a new stack for the todo service.
-
+We now start to prepare a new stack for the todo service.
 Add a new stack in a new file `lib/ecs-stack.ts` with the following code:
 
 ```typescript
@@ -54,7 +28,7 @@ export class EcsStack extends cdk.Stack {
 
 ```
 
-As with the databaseStack, make sure to import and add the new stack to the `bin/cdk.ts` file and pass the `vpc` property:
+As with the other stacks, make sure to import and add the new stack to the `bin/cdk.ts` file and pass the `vpc` property:
 
 ```typescript
 // ...
@@ -66,10 +40,7 @@ const ecsStack = new EcsStack(app, 'EcsStack', {
 });
 ```
 
-Wait until the database stack deletion is complete, then deploy your changes.
-
-When you deploy this later, you'll see in the RDS console that the new database is now running in a private subnet.
-You won't be able to connect to it from your local machine anymore, no matter the security group rules.
+After that, deploy the changes with `cdk deploy --all`.
 
 
 ## Preparing the security groups
@@ -77,11 +48,12 @@ You won't be able to connect to it from your local machine anymore, no matter th
 Open the ECS console and you'll see an empty ECS cluster running already.
 Since it's a Fargate cluster, it doesn't cost anything, as we aren't running any tasks yet.
 
-Previously, we created a security group rule to allow access to the database from our own IP address manually.
-Now, we'll automate the security group rule for the ECS-hosted todo-service.
-For that, we need both security groups in one Stack. It's better to set up the necessary security group rule in the EcsStack, since it's the one that depends on the database and not the other way around.
+Now, we need to adjust the security group rule to allow access from the ECS-hosted todo-service.
+We will be doing that by referencing the ECS task security group in the database security group. 
+For that, we need both security groups in one Stack. It's better to set up the necessary security group rule in the EcsStack, 
+since it's the one that depends on the database and not the other way around.
 
-We could pass the whole database object to the ECS stack, or just the security group. Both would work, but the former breaches the least-privilege principle.
+We could pass the whole database object to the ECS stack or just the security group. Both would work, but the former breaches the least-privilege principle.
 Even better than the security group, we can pass the `Connections` property of the database cluster, which contains the security group of the database and provides some helper functions around it.
 
 Similar to the `vpc` object from the VPC stack earlier, first expose the `Connections` object from the database stack to the ECS stack by making the following changes:
@@ -102,7 +74,7 @@ export class DatabaseStack extends cdk.Stack {
 }
 ```
 
-Don't forget the necessary imports.
+Remember the necessary imports.
 Then, add the `databaseConnections` to the props of the EcsStack in the `lib/ecs-stack.ts` file:
 
 ```typescript
@@ -129,12 +101,33 @@ Alright, the `Connections` object is now being passed to the ECS stack. We'll wo
 Wait for the DatabaseStack deletion to complete and then deploy all changes with `cdk deploy --all`.
 
 
+## Connect the Todo Service with the Database on AWS
+
+Before we can deploy the todo-service, we need to configure the connection details for the database on AWS.
+So we need to update the database configuration in the `todo-service/database.ts` file.
+
+Replace the values in the `todo-service/database.ts` file with the values you can find in the Secret Manager Console in your browser.
+There's a button "Retrieve secret value" at the side when you are in the secret's detail view.
+
+```typescript
+export const AppDataSource = new DataSource({
+  type: "postgres",
+  host: "YOUR_CLUSTER_NAME.eu-central-1.rds.amazonaws.com", // Replace me as necessary
+  port: 5432, // Replace me as necessary
+  username: "YOUR_USERNAME", // Replace me as necessary
+  password: "YOUR_PASSWORD", // Replace me as necessary
+  database: "postgres", // Replace me as necessary
+  synchronize: true, // Auto creates tables, disable in production
+  logging: false,
+  entities: [Todo],
+});
+```
+
+
 ## Deploying the todo-service to ECS
 
-Since we've created a new database, don't forget to update the connection string in the `todo-service/src/database.ts` file with the new url and credentials.
-
 Now, the only thing that's still missing is the todo-service itself.
-Add the following lines to the ECS Stack constructor in the `lib/ecs-stack.ts` file, right after the `cluster` variable declaration:
+Add the following lines to the ECS Stack constructor in the `lib/ecs-stack.ts` file, right after the `cluster` variable definition:
 
 ```typescript
 const albFargateService = new ApplicationLoadBalancedFargateService(
@@ -146,9 +139,9 @@ const albFargateService = new ApplicationLoadBalancedFargateService(
     memoryLimitMiB: 1024,
     desiredCount: 1,
     taskImageOptions: {
-      image: ContainerImage.fromAsset('../todo-service', {
+      image: ContainerImage.fromAsset('..', {
         platform: Platform.LINUX_AMD64,
-        exclude: ['node_modules'],
+        exclude: ['node_modules', 'cdk.out'],
       }),
       containerPort: 3000,
       logDriver: new AwsLogDriver({
@@ -171,7 +164,7 @@ Necessary imports can be found in `aws-cdk-lib/aws-ec2`, `aws-cdk-lib/aws-ecr-as
 
 It's the most complex object we've used so far. So let's break it down:
 
-- `cluster` is the ECS cluster we created earlier. Normally, it'd be `cluster: cluster`, but when both sides have the same name in typescript, we can shorten it.
+- `cluster` is the ECS cluster we created earlier. Normally, it'd be `cluster: cluster`, but when both sides have the same name in TypeScript, we can shorten it.
 - `cpu` is _not_ the amount of CPU cores, but rather a CPU unit value where 1024 units = 1 vCPU. These units are sometimes also called "millicores".
   More insights can be found in the [AWS docs](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_ecs_patterns.ApplicationLoadBalancedFargateService.html#cpu).
 - `memoryLimitMiB` is the maximum amount of memory in MiB that the ECS-task is allowed to use. It is also what you'll pay for. Check the link on `cpu` about allowed combinations of `cpu` and `memoryLimitMiB`.

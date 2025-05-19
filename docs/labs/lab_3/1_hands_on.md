@@ -99,28 +99,6 @@ The creation of a RDS database takes roughly 10 minutes, so feel free to grab a 
 After the deployment of this new stack is complete, check if you can find the database in the AWS console.
 How is it configured? In which subnets is it running in? Does it have a security group?
 
-
-## Connect the Todo Service with the Database on AWS
-
-Now, with the new database, we should update the database configuration in the `todo-service/database.ts` file.
-
-Replace the values in the `todo-service/database.ts` file with the values you can find in the Secret Manager Console in your browser.
-There's a button "Retrieve secret value" at the side when you are in the secret's detail view.
-
-```typescript
-export const AppDataSource = new DataSource({
-  type: "postgres",
-  host: "YOUR_CLUSTER_NAME.eu-central-1.rds.amazonaws.com", // Replace me as necessary
-  port: 5432, // Replace me as necessary
-  username: "YOUR_USERNAME", // Replace me as necessary
-  password: "YOUR_PASSWORD", // Replace me as necessary
-  database: "postgres", // Replace me as necessary
-  synchronize: true, // Auto creates tables, disable in production
-  logging: false,
-  entities: [Todo],
-});
-```
-
 ## Connect to your database using Cloudshell
 
 We can only connect to the database from within the VPC we created earlier. As an easy solution, we can use the AWS CloudShell. 
@@ -133,8 +111,10 @@ By default, the CloudShell is not in the same VPC as your database, but you can 
 3. Wait for the CloudShell to start. This may take a few moments.
 4. Click on the "Actions" dropdown menu in the CloudShell.
 5. Select "Create VPC Environment" and select the VPC you created earlier.
+6. Important: We need to select the same security group as the database is in.
+7. Click on "Create" to create the VPC environment.
 
-To connect to the database, we need the PostgreSQL client. It should already been installed in the CloudShell.
+To connect to the database, we need the PostgreSQL client. It should already be installed in the CloudShell.
 ```sh
 $ psql --version
 psql (PostgreSQL) 15.12
