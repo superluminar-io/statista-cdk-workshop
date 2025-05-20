@@ -146,9 +146,11 @@ curl -X POST \
 You can replace `<load-balancer-dns-name>` with the actual DNS name of your load balancer, which you can find in the AWS console.
 You can also use Postman or any other API testing tool to send requests to your todo-service.
 
-Try to create a few todo items, and then retrieve them using a GET request. After that, try to update or delete them.
+Try to create a few todo items and then retrieve them using a GET request. After that, try to update or delete them.
 
 ## Summary
 
 In this lab, you learned how to run your containerized application on AWS using ECS.
 You also connected it to a database running on AWS and used AWS Secrets Manager to manage the database credentials securely.
+
+You can now head to the next lab where you'll learn how to set up a CI/CD pipeline for your application using Gitlab Actions.
