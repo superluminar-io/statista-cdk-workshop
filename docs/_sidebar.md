@@ -16,7 +16,10 @@
   - Lab 4 - Secrets and Security
     - [Theory](/labs/lab_5/0_theory)
     - [Hands On](/labs/lab_5/1_hands_on)
-  - Lab 8 - Custom Contructs
+  - Lab 5 - CI/CD with CDK
+    - [Theory](/labs/lab_10/0_theory)
+    - [Hands On](/labs/lab_10/1_hands_on)
+  - Lab 6 - Custom Contructs
     - [Theory](/labs/lab_9/0_theory)
     - [Hands On](/labs/lab_9/1_hands_on)
 - [Conclusion](/2_conclusion)
