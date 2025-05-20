@@ -60,9 +60,8 @@ const vpcStack = new VpcStack(app, 'VpcStack', {
 });
 ```
 
-
-As described earlier, we can let CDK decide which account to deploy to, based on our aws configuration. In our case, we want to specify the region explicitly. That's because the default region is `us-east-1`.
-In comparison to the previous `new CdkStack`, our new `VpcStack` is assigned to a variable. That's necessary to later be able to use its output - the VPC object.
+As described earlier, we can let CDK decide which account to deploy to, based on our AWS configuration. In our case, we want to specify the region explicitly. That's because the default region is `us-east-1`.
+In comparison to the previous `new CdkStack`, our new `VpcStack` is assigned to a variable. That's necessary to later be able to use its output – the VPC object.
 
 Check if your syntax is correct by running a dry-run of the deployment with the following command:
 
@@ -70,8 +69,119 @@ Check if your syntax is correct by running a dry-run of the deployment with the 
 cdk synth
 ```
 
-This command creates a CloudFormation template in the `cdk.out` directory and prints it directly to the console. This workshop won't cover how to read CloudFormation templates, but the command is still useful to check if your syntax is correct.
-For now, just know, if there was no error, your syntax is correct.
+This command triggers the **synthesis phase** of your CDK application.
+
+### CDK Application Lifecycle
+
+When you use AWS CDK, there are two main phases involved in creating infrastructure:
+
+#### 1. **Synthesis**
+
+This is the phase where CDK takes your code (written in TypeScript, Python, or another supported language) and converts it into a **CloudFormation template**. This happens locally on your machine. The result is a `.json` or `.yaml` file that defines the infrastructure in a declarative way—just like you would write by hand in plain CloudFormation, but automatically generated from your higher-level CDK code.
+
+You can inspect this template in the `cdk.out/` directory. Understanding what CDK synthesizes can help with:
+
+* Debugging issues in complex setups
+* Explaining changes during code reviews
+* Validating that the correct resources and configurations are being generated
+
+#### 2. **Deployment**
+
+In the **deployment phase**, CDK hands the synthesized CloudFormation template over to the **AWS CloudFormation service**. This happens via the `cdk deploy` command. CloudFormation then compares the current state of your infrastructure with the desired state described in the template and makes the necessary changes—creating, updating, or deleting resources as needed.
+
+This approach provides:
+
+* **Change tracking**: every deployment is recorded in the CloudFormation console
+* **Safety mechanisms**: if something fails during deployment, CloudFormation rolls back the changes
+* **Consistency**: deployments are always based on a complete, versioned template
+
+Here’s an overview of the flow:
+
+```
+Your CDK Code (TypeScript, Python, etc.)
+                |
+                v
+      CDK Synthesizer (cdk synth)
+                |
+                v
+   CloudFormation Template (JSON/YAML)
+                |
+                v
+ CDK Deployment Engine (cdk deploy)
+                |
+                v
+ AWS CloudFormation (creates/updates resources)
+                |
+                v
+Deployed Infrastructure (VPCs, Databases, etc.)
+```
+
+Each phase plays a critical role:
+
+* **Synthesis** ensures that your code can be transformed into valid infrastructure configuration
+* **Deployment** ensures that your desired configuration is correctly applied to the AWS environment
+
+If the `cdk synth` command runs without error, you can be confident that your code is valid and can move on to deploying it.
+
+## Exercise: Understand Changes with `cdk diff`
+
+Now that you've successfully synthesized your CDK app, let’s explore the next step before deploying: checking what will change in your AWS environment.
+
+AWS CDK provides a built-in command for this purpose:
+
+```sh
+cdk diff
+```
+
+### What does `cdk diff` do?
+
+This command compares the current deployed state of your stack (as known to AWS CloudFormation) with the changes in your local CDK app. It then prints a human-readable summary of the differences.
+
+Use it to:
+
+* **See what resources will be created, modified, or deleted**
+* **Understand unintended changes before they happen**
+* **Review infrastructure changes as part of code reviews or pull requests**
+
+### Try it out
+
+1. Make a small change in your `VpcStack`. For example, increase the number of NAT gateways from `1` to `2`:
+
+```typescript
+natGateways: 2,
+```
+
+2. Run the `cdk diff` command:
+
+```sh
+cdk diff
+```
+
+3. Observe the output. You should see something like:
+
+```
+Stack VpcStack
+Resources
+[+] AWS::EC2::NatGateway Vpc/PublicSubnet1/NATGateway ...
+```
+
+The `+` sign means a new resource will be created. You’ll also see explanations if resources are replaced or deleted.
+
+4. Revert the change before continuing the workshop if you don’t want the additional cost of a second NAT gateway.
+
+### Optional: Review Your Stack's Current State
+
+For extra practice, navigate to the AWS CloudFormation console in your browser, select your stack (`VpcStack`), and inspect:
+
+* The **Resources** tab – to see what’s currently deployed
+* The **Template** tab – to view the last deployed CloudFormation template
+* The **Change Sets** – which is what CDK is simulating with `cdk diff`
+
+### Why this matters
+
+Using `cdk diff` regularly is one of the most important habits in CDK-based development. It gives you confidence in what will happen—before it happens. This is especially important in production environments, or when working in teams.
+
+---
 
 Now, deploy the stack with one of the following commands:
 
