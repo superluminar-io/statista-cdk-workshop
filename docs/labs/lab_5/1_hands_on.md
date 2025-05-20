@@ -123,3 +123,32 @@ Did you notice how cdk automatically managed the permissions, so ECS can access 
 When the deployment is complete, check out the new ECS-task in the ECS console.
 There's additional information towards the bottom of its details page.
 Go to the `Environment variables and files` tab and check out how a secret references look like.
+
+
+## Give it a try
+
+Now that you have a working todo-service, try it out by running some requests against it.
+You can use the following curl command to create a new todo item:
+
+```sh
+curl -X POST \
+  http://<load-balancer-dns-name>/todos \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "title": "Task Management API",
+    "description": "API for managing, tasks",
+    "dueDate": "2023-10-31",
+    "status": "pending",
+    "userEmail": "some@example.com"
+}'
+```
+
+You can replace `<load-balancer-dns-name>` with the actual DNS name of your load balancer, which you can find in the AWS console.
+You can also use Postman or any other API testing tool to send requests to your todo-service.
+
+Try to create a few todo items, and then retrieve them using a GET request. After that, try to update or delete them.
+
+## Summary
+
+In this lab, you learned how to run your containerized application on AWS using ECS.
+You also connected it to a database running on AWS and used AWS Secrets Manager to manage the database credentials securely.
