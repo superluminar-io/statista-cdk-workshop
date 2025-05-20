@@ -1,0 +1,29 @@
+name: Deploy CDK App
+
+on:
+  push:
+    branches: ['test-deploy']
+
+jobs:
+  deploy-cdk:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: cdk
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - run: npx cdk synth
+      - run: npx cdk deploy --require-approval never
