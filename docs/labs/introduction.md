@@ -11,10 +11,7 @@ This workshop is structured into several labs, each focusing on a specific AWS s
 
 Navigate through the labs in order, as each builds upon the previous one. Use the sidebar to move between sections.
 
-If you get stuck during any of the steps, you can always check the end-state to see what you should have at the end of the particular step.
-To see the difference between your current state and the end-state, you can use for example `diff -Nur --exclude=node_modules todo-service docs/labs/lab_2/goal/todo-service`.
-
-To be able to `diff`, you'll need to check out this repository locally.
+If you get stuck during any of the steps, please do not hesitate to ask for help from your instructor or fellow participants.
 
 It's recommended to start with a new empty folder and copying the `todo-service` folder from this repository into it.
 
