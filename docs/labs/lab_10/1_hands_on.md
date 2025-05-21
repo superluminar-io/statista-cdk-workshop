@@ -1,5 +1,9 @@
 # Hands On
 
+## Attention!!
+
+This part is a task for the whole group. If you already reach this part of the workshop, feel free to read a head. But please wait for the rest of the group to catch up, since we will do this together.
+
 ## Github Permissions and Configuration
 
 To allow you to deploy your CDK app from GitHub Actions, we need to set up a few things:
@@ -34,7 +38,6 @@ In this lab, we’ll use GitHub Actions to:
 
 * Deploy our CDK app on every branch push to a specific branch (e.g., `main`)
 * Use an **OpenID Connect (OIDC)** role to authenticate to AWS (without long-lived access keys)
-* Set up caching to speed up builds
 * Add approval logic or environment-specific triggers
 
 ## Example Workflow Structure
@@ -157,6 +160,7 @@ on:
 env:
    AWS_ACCOUNT: YOUR_AWS_ACCOUNT_ID
    AWS_REGION: eu-central-1
+   REPOSITORY_NAME: todo-service
 
 jobs:
    deploy-cdk:
@@ -175,11 +179,13 @@ jobs:
          - uses: actions/setup-node@v4
            with:
               node-version: 22
+              
+         - run: echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
          - run: npm ci
          - run: npm run test
-         - run: npx cdk synth
-         - run: npx cdk deploy --all --require-approval never
+         - run: npx cdk synth --context imageTag=$IMAGE_TAG
+         - run: npx cdk deploy --all --require-approval never --context imageTag=$IMAGE_TAG
 ```
 
 To test it out, make a change to your CDK app and push it to the `main` branch. This should trigger the GitHub Actions workflow and deploy your CDK app to AWS.
@@ -205,8 +211,8 @@ To do this, we simply use the `aws-actions/configure-aws-credentials` action and
 
       - run: npm ci
       - run: npm run test
-      - run: npx cdk synth
-      - run: npx cdk deploy --all --require-approval never
+      - run: npx cdk synth --context imageTag=$IMAGE_TAG
+      - run: npx cdk deploy --all --require-approval never --context imageTag=$IMAGE_TAG
 ```
 
 ## Conclusion

@@ -28,7 +28,7 @@ export class EcrStack extends cdk.Stack {
 
     this.todoServiceRepo = new Repository(this, 'TodoServiceRepo', {
       repositoryName: 'todo-service',
-      imageTagMutability: TagMutability.MUTABLE,
+      imageTagMutability: TagMutability.IMMUTABLE,
     });
   }
 }

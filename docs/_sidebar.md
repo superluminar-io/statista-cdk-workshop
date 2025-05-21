@@ -19,11 +19,11 @@
   - Lab 5 - Secrets and Security
     - [Theory](/labs/lab_5/0_theory)
     - [Hands On](/labs/lab_5/1_hands_on)
-  - Lab 6 - CI/CD with CDK
-    - [Theory](/labs/lab_10/0_theory)
-    - [Hands On](/labs/lab_10/1_hands_on)
-  - Lab 7 - Custom Constructs
+  - Lab 6 - Custom Constructs
     - [Theory](/labs/lab_9/0_theory)
     - [Hands On](/labs/lab_9/1_hands_on)
+  - Lab 7 - CI/CD with CDK
+    - [Theory](/labs/lab_10/0_theory)
+    - [Hands On](/labs/lab_10/1_hands_on)
 - [Conclusion](/2_conclusion)
 - [Clean Up](/3_cleanup)
