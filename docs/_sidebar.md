@@ -13,13 +13,16 @@
   - Lab 3 - Container on AWS
     - [Theory](/labs/lab_4/0_theory)
     - [Hands On](/labs/lab_4/1_hands_on)
-  - Lab 4 - Secrets and Security
+  - Lab 4 - Managing ECR with CDK
+    - [Theory](/labs/lab_11/0_theory)
+    - [Hands On](/labs/lab_11/1_hands_on)
+  - Lab 5 - Secrets and Security
     - [Theory](/labs/lab_5/0_theory)
     - [Hands On](/labs/lab_5/1_hands_on)
-  - Lab 5 - CI/CD with CDK
+  - Lab 6 - CI/CD with CDK
     - [Theory](/labs/lab_10/0_theory)
     - [Hands On](/labs/lab_10/1_hands_on)
-  - Lab 6 - Custom Contructs
+  - Lab 7 - Custom Constructs
     - [Theory](/labs/lab_9/0_theory)
     - [Hands On](/labs/lab_9/1_hands_on)
 - [Conclusion](/2_conclusion)
