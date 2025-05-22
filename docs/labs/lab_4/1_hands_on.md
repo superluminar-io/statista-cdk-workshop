@@ -139,7 +139,7 @@ const albFargateService = new ApplicationLoadBalancedFargateService(
     memoryLimitMiB: 1024,
     desiredCount: 1,
     taskImageOptions: {
-      image: ContainerImage.fromAsset('..', {
+      image: ContainerImage.fromAsset('../todo-service', {
         platform: Platform.LINUX_AMD64,
         exclude: ['node_modules', 'cdk.out'],
       }),
