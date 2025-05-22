@@ -19,48 +19,41 @@ This setup is useful for:
 Create a new file `lib/static-website.ts`:
 
 ```typescript
-import { Construct } from 'constructs';
-import { Bucket, BucketAccessControl, BucketEncryption } from 'aws-cdk-lib/aws-s3';
-import { CloudFrontWebDistribution, OriginAccessIdentity } from 'aws-cdk-lib/aws-cloudfront';
-import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
+import {Construct} from 'constructs';
+import {Bucket, BucketAccessControl, BucketEncryption} from 'aws-cdk-lib/aws-s3';
+import {Distribution} from 'aws-cdk-lib/aws-cloudfront';
+import {BucketDeployment, Source} from 'aws-cdk-lib/aws-s3-deployment';
 import * as path from 'path';
+import {S3BucketOrigin} from "aws-cdk-lib/aws-cloudfront-origins";
 
 export interface StaticWebsiteProps {
-  websitePath: string;
+    websitePath: string;
 }
 
 export class StaticWebsite extends Construct {
-  public readonly distribution: CloudFrontWebDistribution;
+    public readonly distribution: Distribution;
 
-  constructor(scope: Construct, id: string, props: StaticWebsiteProps) {
-    super(scope, id);
+    constructor(scope: Construct, id: string, props: StaticWebsiteProps) {
+        super(scope, id);
 
-    const bucket = new Bucket(this, 'WebsiteBucket', {
-      encryption: BucketEncryption.S3_MANAGED,
-      accessControl: BucketAccessControl.PRIVATE,
-    });
+        const bucket = new Bucket(this, 'WebsiteBucket', {
+            encryption: BucketEncryption.S3_MANAGED,
+            accessControl: BucketAccessControl.PRIVATE,
+        });
 
-    const oai = new OriginAccessIdentity(this, 'OAI');
+        this.distribution = new Distribution(this, 'WebsiteCDN', {
+            defaultBehavior: {
+                origin: S3BucketOrigin.withOriginAccessControl(bucket),
+            },
+        });
 
-    this.distribution = new CloudFrontWebDistribution(this, 'WebsiteCDN', {
-      originConfigs: [
-        {
-          s3OriginSource: {
-            s3BucketSource: bucket,
-            originAccessIdentity: oai,
-          },
-          behaviors: [{ isDefaultBehavior: true }],
-        },
-      ],
-    });
-
-    new BucketDeployment(this, 'DeployWebsite', {
-      destinationBucket: bucket,
-      sources: [Source.asset(path.resolve(props.websitePath))],
-      distribution: this.distribution,
-      distributionPaths: ['/*'],
-    });
-  }
+        new BucketDeployment(this, 'DeployWebsite', {
+            destinationBucket: bucket,
+            sources: [Source.asset(path.resolve(props.websitePath))],
+            distribution: this.distribution,
+            distributionPaths: ['/*'],
+        });
+    }
 }
 ```
 
@@ -77,17 +70,17 @@ import { Construct } from 'constructs';
 import { StaticWebsite } from './static-website';
 
 export class StaticSiteStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
 
-    new StaticWebsite(this, 'MyWebsite', {
-      websitePath: './website',
-    });
-  }
+        new StaticWebsite(this, 'MyWebsite', {
+            websitePath: '../website',
+        });
+    }
 }
 ```
 
-Make sure you have a local folder named `website/` containing at least an `index.html` file. For example:
+Make sure you have a local folder named `website/` at the root of the project directory containing at least an `index.html` file. For example:
 
 ```html
 <!-- website/index.html -->
